@@ -1,9 +1,34 @@
 import 'dart:ffi';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-class SignupStudent extends StatelessWidget {
-  
+class SignupStudent extends StatefulWidget {
+  @override
+  _SignupStudentState createState() => _SignupStudentState();
+}
+
+class _SignupStudentState extends State<SignupStudent> {
+  TextEditingController _namecontroller,
+      _emailcontroller,
+      _numbercontroller,
+      _password;
+
+  final DatabaseReference _ref =
+      FirebaseDatabase.instance.reference().child("studentdetails");
+
+  void sendData() {
+    _ref.push().set({'first_name': 'gaurav', 'last_name': 'jain'});
+  }
+
+  @override
+  Void initState() {
+    super.initState;
+    _namecontroller = TextEditingController();
+    _emailcontroller = TextEditingController();
+    _numbercontroller = TextEditingController();
+    _password = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +46,7 @@ class SignupStudent extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   TextField(
-                 
+                    controller: _namecontroller,
                     decoration: InputDecoration(
                         labelText: 'NAME',
                         labelStyle: TextStyle(
@@ -33,7 +58,7 @@ class SignupStudent extends StatelessWidget {
                   ),
                   SizedBox(height: 10.0),
                   TextField(
-                   
+                    controller: _emailcontroller,
                     decoration: InputDecoration(
                         labelText: 'COLLEGE  E-MAIL',
                         labelStyle: TextStyle(
@@ -45,6 +70,7 @@ class SignupStudent extends StatelessWidget {
                   ),
                   SizedBox(height: 10.0),
                   TextField(
+                    controller: _numbercontroller,
                     decoration: InputDecoration(
                         labelText: 'PHONE NUMBER ',
                         labelStyle: TextStyle(
@@ -56,6 +82,7 @@ class SignupStudent extends StatelessWidget {
                   ),
                   SizedBox(height: 10.0),
                   TextField(
+                    controller: _password,
                     decoration: InputDecoration(
                         labelText: 'PASSWORD ',
                         labelStyle: TextStyle(
@@ -72,8 +99,10 @@ class SignupStudent extends StatelessWidget {
                       child: Material(
                         borderRadius: BorderRadius.circular(20.0),
                         color: Colors.teal[300],
-                        child: GestureDetector(
-                          onTap: () {},
+                        child: InkWell(
+                          onTap: () {
+                            sendData();
+                          },
                           child: Center(
                             child: Text(
                               'SIGNUP',
@@ -99,7 +128,7 @@ class SignupStudent extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20.0)),
                       child: InkWell(
                         onTap: () {
-                          // Navigator.of(context).pop();
+                          sendData();
                         },
                         child: Center(
                           child: Text('LOGIN',
@@ -113,5 +142,19 @@ class SignupStudent extends StatelessWidget {
                 ],
               )),
         ]));
+  }
+
+  void signup() {
+    String name = _namecontroller.text;
+    String id = _emailcontroller.text;
+    String number = _numbercontroller.text;
+    String password = _password.text;
+    Map<String, String> studentdetails = {
+      'name': name,
+      'id': id,
+      'number': '91+' + number,
+      'password': password,
+    };
+    _ref.push().set(studentdetails);
   }
 }
