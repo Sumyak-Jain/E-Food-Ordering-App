@@ -18,7 +18,7 @@ class _SignupStudentState extends State<SignupStudent> {
       FirebaseDatabase.instance.reference().child("studentdetails");
 
   void sendData() {
-    _ref.push().set({'first_name': 'gaurav', 'last_name': 'jain'});
+    // _ref.push().set({'first_name': 'gaurav', 'last_name': 'jain'});
   }
 
   @override
@@ -101,7 +101,7 @@ class _SignupStudentState extends State<SignupStudent> {
                         color: Colors.teal[300],
                         child: InkWell(
                           onTap: () {
-                            sendData();
+                            signup();
                           },
                           child: Center(
                             child: Text(
@@ -127,9 +127,7 @@ class _SignupStudentState extends State<SignupStudent> {
                           color: Colors.transparent,
                           borderRadius: BorderRadius.circular(20.0)),
                       child: InkWell(
-                        onTap: () {
-                          sendData();
-                        },
+                        onTap: () {},
                         child: Center(
                           child: Text('LOGIN',
                               style: TextStyle(
@@ -151,8 +149,8 @@ class _SignupStudentState extends State<SignupStudent> {
     String password = _password.text;
     Map<String, String> studentdetails = {
       'name': name,
-      'id': id,
-      'number': '91+' + number,
+      'email-id': id,
+      'number': number,
       'password': password,
     };
     _ref.push().set(studentdetails);
