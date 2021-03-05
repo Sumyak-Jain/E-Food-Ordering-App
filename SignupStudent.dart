@@ -102,6 +102,7 @@ class _SignupStudentState extends State<SignupStudent> {
                         child: InkWell(
                           onTap: () {
                             signup();
+                            showAlertDialog(context);
                           },
                           child: Center(
                             child: Text(
@@ -154,5 +155,30 @@ class _SignupStudentState extends State<SignupStudent> {
       'password': password,
     };
     _ref.push().set(studentdetails);
+  }
+
+  showAlertDialog(BuildContext context) {
+    //create button
+
+    Widget okButton = InkWell(
+      child: Text("OK"),
+      onTap: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    //create alertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Student Signup"),
+      content: Text("Account Created Successfully!"),
+      actions: [okButton],
+    );
+
+    //show the dialog
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        });
   }
 }
