@@ -103,6 +103,10 @@ class _SignupStudentState extends State<SignupStudent> {
                           onTap: () {
                             signup();
                             showAlertDialog(context);
+                            _namecontroller.clear();
+                            _emailcontroller.clear();
+                            _numbercontroller.clear();
+                            _password.clear();
                           },
                           child: Center(
                             child: Text(
