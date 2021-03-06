@@ -14,6 +14,23 @@ class _SignupStudentState extends State<SignupStudent> {
       _numbercontroller,
       _password;
 
+  bool isNameValid = true;
+  bool isEmailValid = true;
+  bool isnumberValid = true;
+
+  RegExp regExp1 = new RegExp(
+    //name
+    r'^[a-zA-z]+([\s][a-zA-Z]+)*$',
+  );
+  RegExp regExp2 = new RegExp(
+    //email
+    r'^((?!gmail).)*$',
+  );
+
+  RegExp regExp3 = new RegExp(
+    //number
+    r'^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$',
+  );
   final DatabaseReference _ref =
       FirebaseDatabase.instance.reference().child("studentdetails");
 
@@ -47,8 +64,17 @@ class _SignupStudentState extends State<SignupStudent> {
                 children: <Widget>[
                   TextField(
                     controller: _namecontroller,
+                    onChanged: (value) {
+                      if (regExp1.hasMatch(value)) {
+                        isNameValid = true;
+                      } else {
+                        isNameValid = false;
+                      }
+                      setState(() {});
+                    },
                     decoration: InputDecoration(
                         labelText: 'NAME',
+                        errorText: isNameValid ? null : "Invalid name",
                         labelStyle: TextStyle(
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.bold,
@@ -59,8 +85,19 @@ class _SignupStudentState extends State<SignupStudent> {
                   SizedBox(height: 10.0),
                   TextField(
                     controller: _emailcontroller,
+                    onChanged: (value) {
+                      if (regExp2.hasMatch(value) && value.length >= 10) {
+                        isEmailValid = true;
+                      } else {
+                        isEmailValid = false;
+                      }
+                      setState(() {});
+                    },
                     decoration: InputDecoration(
                         labelText: 'COLLEGE  E-MAIL',
+                        errorText: isEmailValid
+                            ? null
+                            : "Please enter college id only",
                         labelStyle: TextStyle(
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.bold,
@@ -71,8 +108,17 @@ class _SignupStudentState extends State<SignupStudent> {
                   SizedBox(height: 10.0),
                   TextField(
                     controller: _numbercontroller,
+                    onChanged: (value) {
+                      if ((regExp3.hasMatch(value)) && value.length == 10) {
+                        isnumberValid = true;
+                      } else {
+                        isnumberValid = false;
+                      }
+                      setState(() {});
+                    },
                     decoration: InputDecoration(
                         labelText: 'PHONE NUMBER ',
+                        errorText: isnumberValid ? null : "Invalid number",
                         labelStyle: TextStyle(
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.bold,
