@@ -1,4 +1,6 @@
 import 'dart:ffi';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
+
 import 'VendorSignup.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -13,26 +15,129 @@ class Orders extends StatefulWidget {
 //    FirebaseDatabase.instance.reference().child("Order ID");
 
 class _OrderState extends State<Orders> {
-  List<Model> list = [];
+  Query _ref;
+
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    final DatabaseReference db =
-        FirebaseDatabase.instance.reference().child("OrderID");
-    db.once().then((DataSnapshot snap) {
-      var keys = snap.value.keys;
-      var data = snap.value;
-      list.clear();
-      for (var key in keys) {
-        Model m = new Model(
-          data[key]['orderID'],
-        );
-        list.add(m);
-      }
-      setState(() {
-        print('Lenght: ${list.length}');
-      });
-    });
+
+    _ref = FirebaseDatabase.instance
+        .reference()
+        .child("VendorDetails")
+        .orderByChild('shop name');
+  }
+
+  Widget buildOrders({Map order}) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      padding: EdgeInsets.all(10),
+      height: 150,
+      color: Colors.grey[300],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.bookmark_sharp,
+                color: Colors.teal,
+                size: 20,
+              ),
+              SizedBox(
+                width: 6,
+              ),
+              Text(
+                order['shop name'],
+                style: TextStyle(
+                    fontFamily: 'Montserrat', fontSize: 20, color: Colors.teal),
+              ),
+
+              SizedBox(width: 110),
+              // ignore: deprecated_member_use
+              RaisedButton(
+                onPressed: () {},
+                color: Colors.teal[300],
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                child: Center(
+                  child: Text('Order Ready',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Montserrat')),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          Row(
+            children: [
+              Icon(
+                Icons.person,
+                color: Colors.teal,
+                size: 20,
+              ),
+              SizedBox(
+                width: 6,
+              ),
+              Text(
+                order['email-id'],
+                style: TextStyle(
+                    fontFamily: 'Montserrat', fontSize: 16, color: Colors.teal),
+              ),
+              SizedBox(width: 15),
+              Icon(
+                Icons.call,
+                color: Colors.teal,
+                size: 20,
+              ),
+              SizedBox(
+                width: 6,
+              ),
+              Text(
+                order['number'],
+                style: TextStyle(
+                    fontFamily: 'Montserrat', fontSize: 16, color: Colors.teal),
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              Icon(
+                Icons.food_bank_sharp,
+                color: Colors.teal,
+                size: 20,
+              ),
+              SizedBox(
+                width: 6,
+              ),
+              Text(
+                order['item name'],
+                style: TextStyle(
+                    fontFamily: 'Montserrat', fontSize: 16, color: Colors.teal),
+              ),
+              SizedBox(width: 15),
+              Icon(
+                Icons.payment_sharp,
+                color: Colors.teal,
+                size: 20,
+              ),
+              SizedBox(
+                width: 6,
+              ),
+              Text(
+                order['password'],
+                style: TextStyle(
+                    fontFamily: 'Montserrat', fontSize: 16, color: Colors.teal),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -44,26 +149,18 @@ class _OrderState extends State<Orders> {
         title: Text("Orders"),
         backgroundColor: Colors.teal[300],
       ),
-      body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(height: 10.0),
-            Container(
-                padding: EdgeInsets.only(top: 35.0, left: 30.0, right: 20.0),
-                child: Column(children: <Widget>[
-                  RichText(
-                    text: TextSpan(
-                      text: 'Order ID',
-                      style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25,
-                          color: Colors.grey[800]),
-                    ),
-                  )
-                ])),
-            SizedBox(height: 10.0),
-          ]),
+      body: Container(
+        height: double.infinity,
+        child: FirebaseAnimatedList(
+          query: _ref,
+          itemBuilder: (BuildContext context, DataSnapshot snapshot,
+              Animation<double> animation, int index) {
+            Map order = snapshot.value;
+
+            return buildOrders(order: order);
+          },
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         elevation: 20,
         backgroundColor: Colors.teal[300],
