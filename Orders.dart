@@ -1,6 +1,6 @@
 import 'dart:ffi';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
-
+import 'package:flutter_sms/flutter_sms.dart';
 import 'VendorSignup.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -22,17 +22,19 @@ class _OrderState extends State<Orders> {
     // TODO: implement initState
     super.initState();
 
-    _ref = FirebaseDatabase.instance
-        .reference()
-        .child("VendorDetails")
-        .orderByChild('shop name');
+    _ref = FirebaseDatabase.instance.reference().child("VendorDetails");
+    // .orderByChild('shop name');
   }
 
+  // ignore: deprecated_member_use
+
   Widget buildOrders({Map order}) {
+    // ignore: deprecated_member_use
+
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       padding: EdgeInsets.all(10),
-      height: 150,
+      height: 200,
       color: Colors.grey[300],
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -57,7 +59,21 @@ class _OrderState extends State<Orders> {
               SizedBox(width: 110),
               // ignore: deprecated_member_use
               RaisedButton(
-                onPressed: () {},
+                onPressed: () {
+                  //  print(order['number']);
+                  //  print(recipents);
+                  recipents.add(order['number']);
+                  print(recipents);
+                  _sendSMS(
+                      "Dear, " +
+                          order['shop name'] +
+                          "\nORDER ID - " +
+                          order['password'] +
+                          "\nPlease Pickup! Your order is ready \nThank You \nE-Food Ordering App Team",
+                      recipents);
+                  recipents.clear();
+                  print(recipents);
+                },
                 color: Colors.teal[300],
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
@@ -87,26 +103,12 @@ class _OrderState extends State<Orders> {
                 style: TextStyle(
                     fontFamily: 'Montserrat', fontSize: 16, color: Colors.teal),
               ),
-              SizedBox(width: 15),
-              Icon(
-                Icons.call,
-                color: Colors.teal,
-                size: 20,
-              ),
-              SizedBox(
-                width: 6,
-              ),
-              Text(
-                order['number'],
-                style: TextStyle(
-                    fontFamily: 'Montserrat', fontSize: 16, color: Colors.teal),
-              ),
             ],
           ),
           SizedBox(height: 10),
           Row(
             children: [
-              Icon(
+              /*  Icon(
                 Icons.food_bank_sharp,
                 color: Colors.teal,
                 size: 20,
@@ -119,7 +121,9 @@ class _OrderState extends State<Orders> {
                 style: TextStyle(
                     fontFamily: 'Montserrat', fontSize: 16, color: Colors.teal),
               ),
+              
               SizedBox(width: 15),
+              */
               Icon(
                 Icons.payment_sharp,
                 color: Colors.teal,
@@ -135,6 +139,24 @@ class _OrderState extends State<Orders> {
               ),
             ],
           ),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              Icon(
+                Icons.call,
+                color: Colors.teal,
+                size: 20,
+              ),
+              SizedBox(
+                width: 6,
+              ),
+              Text(
+                order['number'],
+                style: TextStyle(
+                    fontFamily: 'Montserrat', fontSize: 16, color: Colors.teal),
+              ),
+            ],
+          )
         ],
       ),
     );
@@ -155,7 +177,7 @@ class _OrderState extends State<Orders> {
           query: _ref,
           itemBuilder: (BuildContext context, DataSnapshot snapshot,
               Animation<double> animation, int index) {
-            Map order = snapshot.value;
+            final Map order = snapshot.value;
 
             return buildOrders(order: order);
           },
@@ -207,4 +229,14 @@ class _OrderState extends State<Orders> {
       ),
     );
   }
+}
+
+final List<String> recipents = [];
+void _sendSMS(String message, recipents) async {
+  String _result =
+      await FlutterSms.sendSMS(message: message, recipients: recipents)
+          .catchError((onError) {
+    print(onError);
+  });
+  print(_result);
 }
