@@ -1,6 +1,8 @@
 import 'dart:ffi';
+
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter_sms/flutter_sms.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'VendorSignup.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +18,8 @@ class Orders extends StatefulWidget {
 
 class _OrderState extends State<Orders> {
   Query _ref;
-
+  final DatabaseReference _ref2 =
+      FirebaseDatabase.instance.reference().child("VendorDetails");
   @override
   void initState() {
     // TODO: implement initState
@@ -34,7 +37,7 @@ class _OrderState extends State<Orders> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       padding: EdgeInsets.all(10),
-      height: 200,
+      height: 300,
       color: Colors.grey[300],
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -156,6 +159,29 @@ class _OrderState extends State<Orders> {
                     fontFamily: 'Montserrat', fontSize: 16, color: Colors.teal),
               ),
             ],
+          ),
+          SizedBox(height: 15),
+          Row(
+            children: <Widget>[
+              SizedBox(width: 145),
+              new Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.grey[350],
+                ),
+                // border: Border.all(width: 4, color: Colors.white)),
+                child: new IconButton(
+                  color: Colors.red[700],
+                  iconSize: 40,
+                  icon: new Icon(Icons.delete_sharp),
+                  onPressed: () {
+                    print("delete");
+                    showDeleteDialog(order: order);
+                    // buildOrders(order: order);
+                  },
+                ),
+              )
+            ],
           )
         ],
       ),
@@ -178,6 +204,7 @@ class _OrderState extends State<Orders> {
           itemBuilder: (BuildContext context, DataSnapshot snapshot,
               Animation<double> animation, int index) {
             final Map order = snapshot.value;
+            order['key'] = snapshot.key;
 
             return buildOrders(order: order);
           },
@@ -228,6 +255,36 @@ class _OrderState extends State<Orders> {
         unselectedFontSize: 10.0,
       ),
     );
+  }
+
+  showDeleteDialog({Map order}) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Delete ${order['shop name']}'),
+            content: Text("Are you sure you want to delete?"),
+            actions: [
+              // ignore: deprecated_member_use
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancel'),
+              ),
+              // ignore: deprecated_member_use
+              FlatButton(
+                onPressed: () {
+                  _ref2
+                      .child(order['key'])
+                      .remove()
+                      .whenComplete(() => Navigator.pop(context));
+                },
+                child: Text('Delete'),
+              )
+            ],
+          );
+        });
   }
 }
 
