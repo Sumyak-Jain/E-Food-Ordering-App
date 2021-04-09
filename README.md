@@ -15,3 +15,18 @@ To avoid such a situation, we have suggested "E- food ordering app" which will h
 Our app can be used by both students as well as vendors. Students can place the order from anywhere and select the items from the e-menu and make the payment and once the order is completed they are notified about the completion of the order and they can collect their order from the food counter. Vendors can receive the order and they can edit the items on the menu according to the availability of the items and once the order is completed they can notify the user.
 This app simplifies the process of food ordering for both the customer and the vendors.
 
+### IDE
+
+•	VS code
+•	Android studio
+
+### Tech
+
+•	Flutter
+•	Dart
+
+### Database
+
+•	Firebase
+
+
