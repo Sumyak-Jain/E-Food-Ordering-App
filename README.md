@@ -1,4 +1,9 @@
-# E-Food-Ordering-App
+<h1 align="center">E-Food-Ordering-App</h1>
+
+<p align="center">
+  <img height="400"  src="https://github.com/Sumyak-Jain/E-Food-Ordering-App/blob/main/assets/mainphoto.png">
+</p>
+
 ## Overview
 
 The existing system of ordering at UPES food court is manual as the student has to go to the food counter to order the food. But this can lead to an increase in chances of Covid-19 as students would not maintain the social distance at the food court because they have breaks for less time and mostly at the same time. This system would lead to the crowd at the ordering counter as well as the food court counter.
