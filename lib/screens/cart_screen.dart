@@ -1,100 +1,76 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:foodApp3/commons.dart';
-import 'package:foodApp3/providers/cart.dart';
-import 'package:foodApp3/widgets/bottomNavigation.dart';
-import 'package:foodApp3/widgets/title.dart';
+import 'package:payment/commons.dart';
+import 'package:payment/providers/authentication.dart';
+import 'package:payment/providers/cart.dart';
+import 'package:payment/providers/payment.dart';
+
+import 'package:payment/widgets/title.dart';
 import 'package:provider/provider.dart';
-import '../widgets/cart_item.dart' as ci;
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:toast/toast.dart';
+import '../widgets/cart_item.dart' as ci;
+import '../providers/orders.dart';
 
-// class CartScreen extends StatefulWidget {
-//   static const routeName = '/cart';
-
-//   @override
-//   _CartScreenState createState() => _CartScreenState();
-// }
-
-//class _CartScreenState extends State<CartScreen> {
-//   Razorpay razorpay;
-//   TextEditingController textEditingController = new TextEditingController();
-//   @override
-//   void initState() {
-//     super.initState();
-
-//     razorpay = new Razorpay();
-
-//     razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlerPaymentSuccess);
-//     razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlerErrorFailure);
-//     razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handlerExternalWallet);
-//   }
-
-//   @override
-//   void dispose() {
-//     // TODO: implement dispose
-//     super.dispose();
-//     razorpay.clear();
-//   }
-
-//   void openCheckout(double amount) {
-//     var options = {
-//       "key": "rzp_test_kxRtAi6n0rqAZL",
-//       "amount": amount * 100,
-//       "name": "Shop Name",
-//       // "description": "Payment for the some random product",
-//       "prefill": {"contact": "2323232323", "email": "shdjsdh@gmail.com"},
-//       "external": {
-//         "wallets": ["paytm"]
-//       }
-//     };
-
-//     try {
-//       razorpay.open(options);
-//     } catch (e) {
-//       print(e.toString());
-//     }
-//   }
-// //String id, String title, int quantity, double price, double amount
-//   void handlerPaymentSuccess() {
-//     print("Payment success");
-//     Toast.show("Payment success", context);
-// String id1 = id;
-// String title1 = title;
-// String quan = quantity.toString();
-// String price1 = price.toString();
-// String amt = amount.toString();
-// Map<String, String> cartDetails = {
-//   'id': id1,
-//   'title': title1,
-//   'quantity': quan,
-//   'price': price1,
-//   'amount': amt,
-// };
-// if (id1.isEmpty || title1.isEmpty || quan.isEmpty || price1.isEmpty) {
-//   Toast.show("Empty", context);
-// } else {
-//   Toast.show("Not Empty", context);
-// }
-//}
-
-// void handlerErrorFailure() {
-//   print("Pament error");
-//   Toast.show("Pament error", context);
-// }
-
-// void handlerExternalWallet() {
-//   print("External Wallet");
-//   Toast.show("External Wallet", context);
-// }
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   static const routeName = '/cart';
+
+  @override
+  _CartScreenState createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  final DatabaseReference _ref =
+      FirebaseDatabase.instance.reference().child("OrderDetails");
+
+  Razorpay razorpay;
+  void initState() {
+    razorpay = Razorpay();
+    razorpay.on(
+        Razorpay.EVENT_PAYMENT_SUCCESS,
+        Provider.of<Paymenthelper>(context, listen: false)
+            .handlePaymentSuccess);
+    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,
+        Provider.of<Paymenthelper>(context, listen: false).handlePaymentError);
+    razorpay.on(
+        Razorpay.EVENT_EXTERNAL_WALLET,
+        Provider.of<Paymenthelper>(context, listen: false)
+            .handleExternalWallet);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    razorpay.clear();
+    super.dispose();
+  }
+
+  Future checkMeOut(double amount) async {
+    var options = {
+      'key': 'rzp_test_sX9byr8MEVDj4G',
+      'amount': amount * 100,
+      //'name': Provider.of<Authentication>(context, listen: false).getUserEmail,
+      'descrption': 'payment',
+      'profile': {
+        'contact': '1234567890',
+        //'email':
+        //     Provider.of<Authentication>(context, listen: false).getUserEmail,
+      },
+      'external': {
+        'wallet': ['paytm']
+      }
+    };
+    try {
+      razorpay.open(options);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
     double amount = cart.totalAmount;
-    // String id1=cart.items[1].id;
-    // String title=cart.items[1].title;
-    // int quantity=cart.items[1].quantity;
+
     double price;
     return Scaffold(
       appBar: AppBar(
@@ -131,8 +107,13 @@ class CartScreen extends StatelessWidget {
                   ),
                   FlatButton(
                     child: Text('Checkout'),
-                    onPressed: () {
-                      //openCheckout(amount);
+                    onPressed: () async {
+                      print(cart.totalAmount);
+                      await checkMeOut(amount);
+                      await Provider.of<Orders>(context, listen: false)
+                          .addOrders(
+                              cart.items.values.toList(), cart.totalAmount);
+                      cart.clear();
                     },
                     textColor: Colors.teal[300],
                   ),
@@ -152,9 +133,13 @@ class CartScreen extends StatelessWidget {
                 price: cart.items.values.toList()[i].price,
                 quantity: cart.items.values.toList()[i].quantity,
                 title: cart.items.values.toList()[i].title,
+                total: cart.totalAmount,
               ),
             ),
           ),
+          // CheckoutButton(
+          //   cart: cart,
+          // ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -173,16 +158,6 @@ class CartScreen extends StatelessWidget {
               style: TextStyle(color: Colors.white),
             ),
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(
-          //     Icons.search,
-          //     color: Colors.white,
-          //   ),
-          //   title: Text(
-          //     'Search',
-          //     style: TextStyle(color: Colors.white),
-          //   ),
-          // ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.history,

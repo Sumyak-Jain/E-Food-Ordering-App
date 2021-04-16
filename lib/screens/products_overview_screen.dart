@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:foodApp3/commons.dart';
-import 'package:foodApp3/providers/cart.dart';
-import 'package:foodApp3/widgets/badge.dart';
-import 'package:foodApp3/widgets/bottomNavigation.dart';
+import 'package:payment/providers/cart.dart';
+import 'package:payment/widgets/badge.dart';
+import 'package:payment/widgets/product_grid.dart';
+import 'package:payment/widgets/title.dart';
 
-import 'package:foodApp3/widgets/product_grid.dart';
-import 'package:foodApp3/widgets/product_item.dart';
-import 'package:foodApp3/widgets/title.dart';
 import 'package:provider/provider.dart';
 
+import '../commons.dart';
 import 'cart_screen.dart';
 
 class ProductOverviewScreen extends StatefulWidget {

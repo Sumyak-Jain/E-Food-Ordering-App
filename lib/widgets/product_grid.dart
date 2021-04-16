@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:foodApp3/providers/product.dart';
+import 'package:payment/providers/product.dart';
 
-import 'package:foodApp3/providers/product_provider.dart';
+import 'package:payment/providers/product_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:foodApp3/widgets/product_item.dart';
+import 'package:payment/widgets/product_item.dart';
 
 class ProductGrid extends StatelessWidget {
   @override

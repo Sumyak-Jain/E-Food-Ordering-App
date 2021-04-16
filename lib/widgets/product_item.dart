@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:foodApp3/providers/cart.dart';
-import 'package:foodApp3/providers/product.dart';
-import 'package:foodApp3/providers/product_provider.dart';
-import 'package:foodApp3/widgets/title.dart';
+import 'package:payment/providers/cart.dart';
+import 'package:payment/providers/product.dart';
+import 'package:payment/widgets/title.dart';
+
 import 'package:provider/provider.dart';
 
 import '../commons.dart';

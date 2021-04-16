@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:foodApp3/commons.dart';
-import 'package:foodApp3/widgets/title.dart';
+import 'package:payment/commons.dart';
+import 'package:payment/widgets/title.dart';
 
 class Badge extends StatelessWidget {
   const Badge({
