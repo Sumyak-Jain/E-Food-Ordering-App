@@ -28,6 +28,10 @@ This app simplifies the process of food ordering for both the customer and the v
 
 +	Firebase
 
+## Payment
+
++	Razorpay API
+
 
 
 
