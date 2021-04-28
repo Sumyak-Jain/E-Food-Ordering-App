@@ -29,6 +29,6 @@ This app simplifies the process of food ordering for both the customer and the v
 +	Firebase
 
 
-https://user-images.githubusercontent.com/46700921/116453930-0c8ede00-a87d-11eb-9c29-70dd693321ae.mp4
+
 
 
