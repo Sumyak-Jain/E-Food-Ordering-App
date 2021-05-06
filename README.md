@@ -47,7 +47,10 @@ https://user-images.githubusercontent.com/46700921/117337763-6580f680-aebb-11eb-
 
 https://user-images.githubusercontent.com/46700921/117337778-69147d80-aebb-11eb-8e15-47186e440cdf.mp4
 
-
+steps:
+- title: What is GitHub?
+  description: After watching this video, close the first issue in your repository.
+  video: https://user-images.githubusercontent.com/46700921/117337778-69147d80-aebb-11eb-8e15-47186e440cdf.mp4
 
 
 
