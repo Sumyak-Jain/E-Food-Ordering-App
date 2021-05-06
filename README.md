@@ -33,10 +33,11 @@ This app simplifies the process of food ordering for both the customer and the v
 
 ## OUTPUTS
 
-https://user-images.githubusercontent.com/46700921/117337647-3ff3ed00-aebb-11eb-8fc9-e0a7e5eabcd7.mp4    https://user-images.githubusercontent.com/46700921/117337656-44200a80-aebb-11eb-9d16-587862cceac2.mp4
+
+https://user-images.githubusercontent.com/46700921/117337647-3ff3ed00-aebb-11eb-8fc9-e0a7e5eabcd7.mp4  
 
 
-
+https://user-images.githubusercontent.com/46700921/117337656-44200a80-aebb-11eb-9d16-587862cceac2.mp4
 
 
 https://user-images.githubusercontent.com/46700921/117337702-526e2680-aebb-11eb-8944-9bd48f2485dd.mp4
